@@ -10,11 +10,12 @@ import { useEthers } from "@usedapp/core";
 const PoolFi = () => {
   const { activateBrowserWallet, account } = useEthers();
   const [tab, setTab] = useState("whitelisted");
+  const [borrowed, setBorrowed] = useState(false);
 
   const TABS = {
-    whitelisted: <Whitelisted />,
+    whitelisted: <Whitelisted borrowed={borrowed} setBorrowed={setBorrowed} />,
     other: <OtherNFTs />,
-    loans: <Loans />,
+    loans: <Loans borrowed={borrowed} />,
     liquidity: <ComingSoon />,
   };
 
@@ -24,19 +25,27 @@ const PoolFi = () => {
     <div className="wrapper">
       <header>
         <img src={Logo} className="logo" alt="logo" />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
 
         {account && (
-          <div className="wallet">
-            <div className="wallet-address">keni.eth</div>
-            <div className="wallet-balance">
-              {/* todo : fetch usdc balance */}
-              <span>642.02</span> USDC
+          <>
+            <div className="wallet">
+              <div className="wallet-address">keni.eth</div>
+              <div className="wallet-balance">
+                {/* todo : fetch usdc balance */}
+                <span>{borrowed ? "642.02" : "0.02"}</span> USDC
+              </div>
             </div>
-          </div>
+            <Navigation tab={tab} setTab={setTab} connected={account != null} />
+          </>
         )}
       </header>
-      <Navigation tab={tab} setTab={setTab} connected={account != null} />
-      <main className={`container ${account ? "container--connected" : ""}`}>{TABS[tab]}</main>
+      {account && <main className={`container ${account ? "container--connected" : ""}`}>{TABS[tab]}</main>}
       {!account && (
         <div className="hero">
           <h2 className="hero-heading">WELCOME TO</h2>
