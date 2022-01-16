@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BorrowModal from "./BorrowModal";
 
-const NFT = ({ nft, setApproved }) => {
+const NFT = ({ nft }) => {
   const [showModal, setShowModal] = useState(false);
   const { image, collection, name, price } = nft;
 
@@ -16,7 +16,7 @@ const NFT = ({ nft, setApproved }) => {
         </button>
       </div>
 
-      {showModal && <BorrowModal setShowModal={setShowModal} setApproved={setApproved} />}
+      {showModal && <BorrowModal setShowModal={setShowModal}/>}
     </>
   );
 };

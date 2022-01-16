@@ -17,7 +17,7 @@ const pudgyData2 = {
   price: "Borrow 642 USDC",
 };
 
-const Whitelisted = ({ approved, setApproved }) => {
+const Whitelisted = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const Whitelisted = ({ approved, setApproved }) => {
 
   return (
     <div className="nfts" ref={containerRef}>
-      {!approved && <NFT nft={pudgyData1} setApproved={setApproved} />}
-      <NFT nft={pudgyData2} setApproved={setApproved} />
+      <NFT nft={pudgyData1} />
+      <NFT nft={pudgyData2} />
     </div>
   );
 };
