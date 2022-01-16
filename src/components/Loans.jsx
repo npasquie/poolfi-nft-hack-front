@@ -19,7 +19,7 @@ const approvedLoan = {
   name: "Lil Pudgy #4267",
   time: "16 days, 9 hours, 50 min",
   seconds: 56,
-  price: "642.0012 USDC",
+  price: "0.0012 USDC",
   color: "#00CA2C",
 };
 

@@ -470,11 +470,7 @@ const BorrowModal = ({ setShowModal, setBorrowed }) => {
   const nftInterface = new ethers.utils.Interface(NFTABI);
   const nftContract = new ethers.Contract(nft, nftInterface);
   const approve = useContractFunction(nftContract, "approve");
-  const [accepted, setAccepted] = useState(false);
-  let disabled = false;
-
-  console.log(setBorrowed);
-  console.log(setShowModal);
+  const [disableBtn, setDisableBtn] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -486,34 +482,46 @@ const BorrowModal = ({ setShowModal, setBorrowed }) => {
     // eslint-disable-next-line default-case
     switch (approve.state.status) {
       case "None":
-        return "Borrow 642 USDC";
+        // setDisableBtn(false);
+        return "Take out your loan!";
       case "PendingSignature":
-        disabled = true;
-        return "Waiting for signature ...";
+        // setDisableBtn(true);
+        return "Waiting for signature...";
       case "Mining":
-        disabled = true;
-        return "Approving ...";
+        // setDisableBtn(true);
+        return "Approving...";
     }
 
     if (approve.state.status == "Success") {
       // eslint-disable-next-line default-case
       switch (borrow.state.status) {
         case "None":
-          return "Collateralize & Borrow";
+          if (disableBtn) setDisableBtn(false);
+          return "Borrow 642 USDC";
         case "PendingSignature":
-          disabled = true;
-          return "Waiting for signature ...";
+          // setDisableBtn(true);
+          return "Waiting for signature...";
         case "Mining":
-          disabled = true;
-          return "Approving ...";
+          // setDisableBtn(true);
+          return "Approving...";
       }
     }
 
     if (borrow.state.status == "Success") {
+      if (disableBtn) setDisableBtn(false);
       return "View Transaction";
     }
 
     return "Error";
+  };
+
+  const handleClick = () => {
+    setDisableBtn(true);
+    if (approve.state.status != "Success") {
+      approve.send(poolfi, 1);
+    } else {
+      borrow.send(nft, 2);
+    }
   };
 
   return (
@@ -533,7 +541,21 @@ const BorrowModal = ({ setShowModal, setBorrowed }) => {
                   <div className="modal-countdown">16 days, 9 hours, 12 minutes</div>
                 </>
               )}
-              {approve.state.status != "None" && <div className="modal-text">{getButtonText()}</div>}
+              {approve.state.status != "None" && (
+                <>
+                  <div className="modal-text">Loan in progress</div>
+                  <div className="modal-countdown">
+                    {borrow.state.status === "None"
+                      ? approve.state.status === "PendingSignature" ||
+                        borrow.state.status === "PendingSignature" ||
+                        approve.state.status === "Mining" ||
+                        borrow.state.status === "Mining"
+                        ? "Please check your wallet"
+                        : "Ready!"
+                      : "Please check your wallet"}
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -570,23 +592,13 @@ const BorrowModal = ({ setShowModal, setBorrowed }) => {
           </button>
 
           <div className={`modal-tos ${approve.state.status != "None" ? "disabled" : ""}`}>
-            <input type="checkbox" id="accept" onChange={e => setAccepted(e.target.checked)} />
-            <label for="accept" className="modal-text">
+            <input type="checkbox" id="accept" onChange={e => setDisableBtn(false)} />
+            <label htmlFor="accept" className="modal-text">
               I have read and agreed on the <u>terms of service</u>
             </label>
           </div>
 
-          <button
-            onClick={() => {
-              if (approve.state.status != "Success") {
-                approve.send(poolfi, 1);
-              } else {
-                borrow.send(nft, 2);
-              }
-            }}
-            className="btn btn--approve"
-            disabled={disabled}
-          >
+          <button onClick={() => handleClick()} className="btn btn--approve" disabled={disableBtn}>
             {getButtonText()}
           </button>
         </div>

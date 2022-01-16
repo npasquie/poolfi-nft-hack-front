@@ -32,6 +32,10 @@ header {
   position: relative;
 }
 
+iframe {
+  pointer-events: none !important;
+}
+
 .wallet {
   position: absolute;
   top: 2rem;
@@ -106,14 +110,14 @@ header {
 .navBtn.approved:before {
   content: "1";
   position: absolute;
-  transform: translate(190%, -60%);
+  transform: translate(220%, -60%);
   border-radius: 50%;
   font-size: 15px;
   font-weight: 600;
-  padding: 0.15rem 0.5rem 0.15rem 0.6rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.5rem;
   color: white;
   background: #340a20;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .btn {
@@ -368,8 +372,12 @@ header {
   border-radius: 40px;
 }
 
+.connect-btn:disabled {
+  opacity: 0.65;
+}
+
 .hero {
-  margin-top: -6rem;
+  margin-top: 2rem;
 }
 
 .hero-h1 {

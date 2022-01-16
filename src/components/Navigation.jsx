@@ -1,6 +1,6 @@
 import React from "react";
 
-const Navigation = ({ tab, setTab, connected, approved }) => (
+const Navigation = ({ tab, setTab, connected, borrowed }) => (
   <nav role="navigation" className={`nav ${connected ? "nav--connected" : ""}`}>
     <button onClick={() => setTab("whitelisted")} className={`navBtn ${tab === "whitelisted" ? "active" : ""}`}>
       Whitelisted
@@ -10,7 +10,7 @@ const Navigation = ({ tab, setTab, connected, approved }) => (
     </button>
     <button
       onClick={() => setTab("loans")}
-      className={`navBtn ${tab === "loans" ? "active" : ""} ${approved ? "approved" : ""}`}
+      className={`navBtn ${tab === "loans" ? "active" : ""} ${borrowed ? "approved" : ""}`}
     >
       Loans
     </button>

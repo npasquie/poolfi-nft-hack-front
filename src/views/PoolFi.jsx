@@ -11,6 +11,7 @@ const PoolFi = () => {
   const { activateBrowserWallet, account } = useEthers();
   const [tab, setTab] = useState("whitelisted");
   const [borrowed, setBorrowed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const TABS = {
     whitelisted: <Whitelisted borrowed={borrowed} setBorrowed={setBorrowed} />,
@@ -19,18 +20,15 @@ const PoolFi = () => {
     liquidity: <ComingSoon />,
   };
 
-  console.log(account);
+  const handleConnect = () => {
+    setLoading(true);
+    activateBrowserWallet();
+  };
 
   return (
     <div className="wrapper">
       <header>
         <img src={Logo} className="logo" alt="logo" />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
 
         {account && (
           <>
@@ -41,7 +39,7 @@ const PoolFi = () => {
                 <span>{borrowed ? "642.02" : "0.02"}</span> USDC
               </div>
             </div>
-            <Navigation tab={tab} setTab={setTab} connected={account != null} />
+            <Navigation tab={tab} setTab={setTab} connected={account != null} borrowed={borrowed} />
           </>
         )}
       </header>
@@ -58,8 +56,8 @@ const PoolFi = () => {
 
           <h4 className="hero-subHeading">Instant loans on (almost) any NFT collection</h4>
           <div className="connect">
-            <button className="btn connect-btn" onClick={() => activateBrowserWallet()}>
-              {account ? "keni.eth" : "Connect Wallet"}
+            <button className="btn connect-btn" onClick={() => handleConnect()} disabled={loading}>
+              {loading ? "Please Confirm" : "Connect Wallet"}
             </button>
           </div>
         </div>
