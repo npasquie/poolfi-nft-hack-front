@@ -4,7 +4,7 @@ import { poolfi, nft } from "../eth/mumbai.json"
 import { ethers } from "ethers"
 import { useContractFunction } from "@usedapp/core";
 
-const BorrowModal = ({ setShowModal }) => {
+const BorrowModal = ({ setShowModal, setBorrowed }) => {
   const [fadeIn, setFadeIn] = useState(false);
   const ABI = [{"inputs":[{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"expirationDate","type":"uint256"},{"internalType":"uint256","name":"deathDate","type":"uint256"},{"internalType":"contract IERC20","name":"usdc","type":"address"},{"internalType":"uint256","name":"borrowSPR","type":"uint256"},{"internalType":"contract IERC721[]","name":"collections","type":"address[]"},{"internalType":"uint256[]","name":"_assetPrices","type":"uint256[]"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AuctionNotYetStarted","type":"error"},{"inputs":[],"name":"BorrowsAndRepaysAreClosed","type":"error"},{"inputs":[{"internalType":"contract IERC721","name":"collection","type":"address"}],"name":"CollectionNotWhitelisted","type":"error"},{"inputs":[],"name":"LiquidityNotYetUnlocked","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"}],"name":"SenderIsNotTheBorrower","type":"error"},{"inputs":[],"name":"SuppliesAreClosed","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"borrower","type":"address"},{"indexed":false,"internalType":"uint256","name":"loanId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Borrowed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"loanId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"price","type":"uint256"}],"name":"Bought","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"loanId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Repaid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"supplier","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Supplied","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"supplier","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrew","type":"event"},{"inputs":[],"name":"BORROW_SPR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DEATH_DATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EXPIRATION_DATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"START_DATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IERC721","name":"","type":"address"}],"name":"assetPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract IERC721","name":"collection","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"borrow","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"loanId","type":"uint256"}],"name":"buy","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"loan","outputs":[{"internalType":"contract IERC721","name":"collection","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"loanDate","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"borrowedBy","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"loanId","type":"uint256"}],"name":"repay","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"supply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]
   const poolfiInterface = new ethers.utils.Interface(ABI)
@@ -16,6 +16,9 @@ const BorrowModal = ({ setShowModal }) => {
   const approve = useContractFunction(nftContract, 'approve')
   const [accepted, setAccepted] = useState(false)
   let disabled = false
+
+  console.log(setBorrowed);
+  console.log(setShowModal);
 
   useEffect(() => {
     setTimeout(() => {
@@ -92,7 +95,9 @@ const BorrowModal = ({ setShowModal }) => {
             </div>
           </div>
 
-          <button className="modal-close" onClick={() => setShowModal(false)}>
+          <button className="modal-close" onClick={() => {
+            setBorrowed(true)
+            setShowModal(false)}}>
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M20.5 18.4375C21.0625 19.0625 21.0625 20 20.5 20.5625C19.875 21.1875 18.9375 21.1875 18.375 20.5625L11 13.125L3.5625 20.5625C2.9375 21.1875 2 21.1875 1.4375 20.5625C0.8125 20 0.8125 19.0625 1.4375 18.4375L8.875 11L1.4375 3.5625C0.8125 2.9375 0.8125 2 1.4375 1.4375C2 0.8125 2.9375 0.8125 3.5 1.4375L11 8.9375L18.4375 1.5C19 0.875 19.9375 0.875 20.5 1.5C21.125 2.0625 21.125 3 20.5 3.625L13.0625 11L20.5 18.4375Z"
@@ -112,7 +117,7 @@ const BorrowModal = ({ setShowModal }) => {
             if(approve.state.status != 'Success'){
               approve.send(poolfi, 1)
             } else {
-              borrow.send(nft, 1)
+              borrow.send(nft, 2)
             }
           }} className="btn btn--approve" disabled={disabled}>
             {getButtonText()}
