@@ -5,12 +5,13 @@ import OtherNFTs from "../components/OtherNFTs";
 import Loans from "../components/Loans";
 import ComingSoon from "../components/ComingSoon";
 import Navigation from "../components/Navigation";
-import { useEthers } from '@usedapp/core'
+import { useEthers, useLookupAddress } from '@usedapp/core'
 
 const PoolFi = () => {
 	const { activateBrowserWallet, account } = useEthers()
   const [tab, setTab] = useState("whitelisted");
   const [borrowed, setBorrowed] = useState(false)
+  const ens = useLookupAddress()
 
   const TABS = {
     whitelisted: <Whitelisted borrowed={borrowed} setBorrowed={setBorrowed} />,
@@ -34,7 +35,7 @@ const PoolFi = () => {
 
         {account && (<>
           <div className="wallet">
-            <div className="wallet-address">keni.eth</div>
+            <div className="wallet-address">{ens ?? account.substring(0, 6) + '...' + account.substring(account.length - 4, account.length)}</div>
             <div className="wallet-balance">
               {/* todo : fetch usdc balance */}
               <span>{borrowed ? '642.02' : '0.02'}</span> USDC
