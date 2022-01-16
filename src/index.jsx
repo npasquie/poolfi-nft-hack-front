@@ -1,4 +1,4 @@
-import { Mumbai, DAppProvider } from '@usedapp/core'
+import { Mumbai, DAppProvider } from "@usedapp/core";
 import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { BrowserRouter } from "react-router-dom";
@@ -16,17 +16,17 @@ const prevTheme = window.localStorage.getItem("theme");
 const config = {
   readOnlyChainId: Mumbai.chainId,
   readOnlyUrls: {
-    [Mumbai.chainId]: 'https://matic-mumbai.chainstacklabs.com',
+    [Mumbai.chainId]: "https://matic-mumbai.chainstacklabs.com",
   },
-}
+};
 
 ReactDOM.render(
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
-      <BrowserRouter>
-        <DAppProvider config={config}>
-          <App/>
-        </DAppProvider>
-      </BrowserRouter>
-    </ThemeSwitcherProvider>,
+  <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
+    <BrowserRouter>
+      <DAppProvider config={config}>
+        <App />
+      </DAppProvider>
+    </BrowserRouter>
+  </ThemeSwitcherProvider>,
   document.getElementById("root"),
 );

@@ -1,6 +1,7 @@
 import React from "react";
-import "./App.css";
 import { PoolFi } from "./views";
+import "./App.css";
+import "./helpers/pattern.min.css";
 
 function App() {
   return (

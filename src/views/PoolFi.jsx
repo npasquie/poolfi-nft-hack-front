@@ -5,16 +5,16 @@ import OtherNFTs from "../components/OtherNFTs";
 import Loans from "../components/Loans";
 import ComingSoon from "../components/ComingSoon";
 import Navigation from "../components/Navigation";
-import { useEthers } from '@usedapp/core'
+import { useEthers } from "@usedapp/core";
 
 const PoolFi = () => {
-	const { activateBrowserWallet, account } = useEthers()
+  const { activateBrowserWallet, account } = useEthers();
   const [tab, setTab] = useState("whitelisted");
 
   const TABS = {
-    whitelisted: <Whitelisted/>,
+    whitelisted: <Whitelisted />,
     other: <OtherNFTs />,
-    loans: <Loans/>,
+    loans: <Loans />,
     liquidity: <ComingSoon />,
   };
 
@@ -35,14 +35,14 @@ const PoolFi = () => {
           </div>
         )}
       </header>
-      <Navigation tab={tab} setTab={setTab} connected={account != null}/>
+      <Navigation tab={tab} setTab={setTab} connected={account != null} />
       <main className={`container ${account ? "container--connected" : ""}`}>{TABS[tab]}</main>
       {!account && (
         <div className="hero">
           <h2 className="hero-heading">WELCOME TO</h2>
 
-          <div class="hero-text">
-            <h1 class="hero-pool">
+          <div className="hero-text">
+            <h1 className="hero-pool">
               POOL<span>FI</span>
             </h1>
           </div>

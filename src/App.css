@@ -181,7 +181,7 @@ header {
 }
 
 .modal-backdrop.fade-in .modal {
-  transform: translate(-50%, -52%);
+  transform: translate(-50%, -50%);
   opacity: 1;
 }
 
